@@ -6,7 +6,7 @@ Created on Thur Aug  03 12:00:00 2023
 @Author: Nicanor Kyamba
 """
 import re
-import os
+from os import environ
 import logging
 import mysql.connector
 from typing import List
@@ -63,10 +63,10 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     """
     Function to get database connection
     """
-    username = os.environ.get("PERSONAL_DATA_DB_USERNAME", "root")
-    password = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
-    host = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
-    db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
+    username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
+    password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = environ.get("PERSONAL_DATA_DB_NAME")
 
     mysql_connection = mysql.connector.connection.MySQLConnection(
             user=username,

@@ -6,9 +6,10 @@ Created on Thur Aug  03 12:00:00 2023
 @Author: Nicanor Kyamba
 """
 import re
-from os import environ
+import os
 import logging
 import mysql.connector
+from mysql.connector.connection import MySQLConnection
 from typing import List
 
 
@@ -103,20 +104,18 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """
-    Returns a MySQLConnection object for accessing Personal Data database
-
-    Returns:
-        A MySQLConnection object using connection details from
-        environment variables
+    Function to get database connection
     """
-    username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
-    password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
-    host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
-    db_name = environ.get("PERSONAL_DATA_DB_NAME")
+    username = os.environ.get("PERSONAL_DATA_DB_USERNAME", "nicanorkyamba")
+    password = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
 
-    mysql_connection = mysql.connector.connection.MySQLConnection(
+    mysql_connection = mysql.connector.MySQLConnection(
             user=username,
             password=password,
             host=host,
-            database=db_name)
+            database=db_name
+        )
+
     return mysql_connection

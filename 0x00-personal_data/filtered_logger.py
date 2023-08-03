@@ -31,9 +31,10 @@ def filter_datum(fields: List[str], redaction: str,
     str
         Filtered message
     """
-    pattern = '|'.join(fields)
-    return re.sub(
-            rf'({pattern})=([^{separator}]*)', rf'\1={redaction}', message)
+    for field in fields:
+        message = re.sub(
+            rf'({field})=([^{separator}]*)', rf'\1={redaction}', message)
+    return message
 
 
 class RedactingFormatter(logging.Formatter):

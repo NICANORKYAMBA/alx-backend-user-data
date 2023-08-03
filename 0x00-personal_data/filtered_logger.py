@@ -28,9 +28,6 @@ def filter_datum(fields, redaction, message, separator):
     str
         Filtered message
     """
-    for field in fields:
-        pattern = re.compile(
-                rf'(?<={field}=)[^{separator}]*(?={separator})|(?<={field}=)\
-                        [^{separator}]*$')
-        message = pattern.sub(redaction, message)
-    return message
+    pattern = '|'.join(fields)
+    return re.sub(
+            rf'({pattern})=([^{separator}]*)', rf'\1={redaction}', message)

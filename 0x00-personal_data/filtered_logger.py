@@ -9,8 +9,8 @@ import re
 import os
 import logging
 import mysql.connector
-from mysql.connector.connection import MySQLConnection
 from typing import List
+from mysql.connector.connection import MySQLConnection
 
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
@@ -41,6 +41,42 @@ def filter_datum(fields: List[str], redaction: str,
         message = re.sub(
             rf'({field})=([^{separator}]*)', rf'\1={redaction}', message)
     return message
+
+
+def get_logger() -> logging.Logger:
+    """
+    Function to get logger
+    """
+    logger = logging.getLogger('user_data')
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    stream_handler = logging.StreamHandler()
+    formatter = RedactingFormatter(list(PII_FIELDS))
+    stream_handler.setFormatter(formatter)
+
+    logger.addHandler(stream_handler)
+
+    return logger
+
+
+def get_db() -> MySQLConnection:
+    """
+    Function to get database connection
+    """
+    username = os.environ.get("PERSONAL_DATA_DB_USERNAME", "root")
+    password = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
+
+    mysql_connection = mysql.connector.MySQLConnection(
+            user=username,
+            password=password,
+            host=host,
+            database=db_name
+        )
+
+    return mysql_connection
 
 
 class RedactingFormatter(logging.Formatter):
@@ -83,42 +119,6 @@ class RedactingFormatter(logging.Formatter):
         record.msg = filter_datum(self.fields, self.REDACTION,
                                   record.getMessage(), self.SEPARATOR)
         return super(RedactingFormatter, self).format(record)
-
-
-def get_logger() -> logging.Logger:
-    """
-    Function to get logger
-    """
-    logger = logging.getLogger('user_data')
-    logger.setLevel(logging.INFO)
-    logger.propagate = False
-
-    stream_handler = logging.StreamHandler()
-    formatter = RedactingFormatter(list(PII_FIELDS))
-    stream_handler.setFormatter(formatter)
-
-    logger.addHandler(stream_handler)
-
-    return logger
-
-
-def get_db() -> mysql.connector.connection.MySQLConnection:
-    """
-    Function to get database connection
-    """
-    username = os.environ.get("PERSONAL_DATA_DB_USERNAME", "nicanorkyamba")
-    password = os.environ.get("PERSONAL_DATA_DB_PASSWORD", "")
-    host = os.environ.get("PERSONAL_DATA_DB_HOST", "127.0.0.1")
-    db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
-
-    mysql_connection = mysql.connector.MySQLConnection(
-            user=username,
-            password=password,
-            host=host,
-            database=db_name
-        )
-
-    return mysql_connection
 
 
 def main():

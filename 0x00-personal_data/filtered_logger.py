@@ -73,9 +73,7 @@ class RedactingFormatter(logging.Formatter):
         str
             Formatted record
         """
-        log_message = super().format(record)
-        for field in self.fields:
-            pattern = rf'(?<={field}=)[^{self.SEPARATOR}\
-                    ]*(?={self.SEPARATOR})|(?<={field}=)[^{self.SEPARATOR}]*$'
-            log_message = re.sub(pattern, self.REDACTION, log_message)
-        return log_message
+        record.msg = filter_datum(
+            self.fields, self.REDACTION, record.getMessage(), self.SEPARATOR
+        )
+        return super(RedactingFormatter, self).format(record)

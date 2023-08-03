@@ -93,7 +93,7 @@ def get_logger() -> logging.Logger:
     logger.propagate = False
 
     stream_handler = logging.StreamHandler()
-    formatter = RedactingFormatter(PII_FIELDS)
+    formatter = RedactingFormatter(list(PII_FIELDS))
     stream_handler.setFormatter(formatter)
 
     logger.addHandler(stream_handler)
@@ -110,9 +110,11 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     host = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
     db_name = os.environ.get('PERSONAL_DATA_DB_NAME')
 
-    return mysql.connector.MySQLConnection(
-        user=username,
-        password=password,
-        host=host,
-        database=db_name
-    )
+    mysql_connection = mysql.connector.MySQLConnection(
+            user=username,
+            password=password,
+            host=host,
+            database=db_name
+        )
+
+    return mysql_connection

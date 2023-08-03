@@ -6,9 +6,11 @@ Created on Thur Aug  03 12:00:00 2023
 @Author: Nicanor Kyamba
 """
 import re
+from typing import List
 
 
-def filter_datum(fields, redaction, message, separator):
+def filter_datum(fields: List[str], redaction: str,
+                 message: str, separator: str) -> str:
     """
     Function to filter a message based on a list of fields
 

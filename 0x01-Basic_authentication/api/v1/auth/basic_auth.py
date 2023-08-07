@@ -5,6 +5,7 @@ Created on Mon Aug  07 15:00:00 2023
 
 @Author: Nicanor Kyamba
 """
+import base64
 from api.v1.auth.auth import Auth
 
 
@@ -33,3 +34,26 @@ class BasicAuth(Auth):
             return None
 
         return authorization_header[6:]
+
+    def decode_base64_authorization_header(
+            self, base64_authorization_header: str) -> str:
+        """
+        Decode base64 authorization header
+
+        Args:
+            base64_authorization_header (str): Base64 authorization header
+
+        Returns:
+            str: Decoded base64 authorization header
+        """
+        if base64_authorization_header is None:
+            return None
+        if not isinstance(base64_authorization_header, str):
+            return None
+
+        try:
+            decoded_bytes = base64.b64decode(base64_authorization_header)
+            decoded_str = decoded_bytes.decode('utf-8')
+            return decoded_str
+        except Exception:
+            return None

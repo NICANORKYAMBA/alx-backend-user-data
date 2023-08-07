@@ -10,7 +10,7 @@ from api.v1.views import app_views
 def status() -> str:
     """
     GET /api/v1/status
-    
+
     Return:
       - the status of the API
     """
@@ -21,7 +21,7 @@ def status() -> str:
 def stats() -> str:
     """
     GET /api/v1/stats
-    
+
     Return:
       - the number of each objects
     """
@@ -30,11 +30,12 @@ def stats() -> str:
     stats['users'] = User.count()
     return jsonify(stats)
 
+
 @app_views.route('/unauthorized', methods=['GET'], strict_slashes=False)
 def unauthorized():
     """
     GET /api/v1/unauthorized
-    
+
     Return:
       - unauthorized
     """

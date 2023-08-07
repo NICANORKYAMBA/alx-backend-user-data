@@ -7,6 +7,7 @@ from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 import os
+import json
 
 
 app = Flask(__name__)
@@ -16,9 +17,19 @@ CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 @app.errorhandler(404)
 def not_found(error) -> str:
-    """ Not found handler
+    """
+    Not found error handler
     """
     return jsonify({"error": "Not found"}), 404
+
+@app.errorhandler(401)
+def unauthorized_error(error) -> str:
+    """
+    Unauthorized error handler
+    """
+    response_data = {"error": "Unauthorized"}
+
+    return jsonify(response_data), 401
 
 
 if __name__ == "__main__":

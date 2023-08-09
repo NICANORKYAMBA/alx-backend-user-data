@@ -30,7 +30,7 @@ def session_login():
     except Exception:
         return jsonify({'error': 'no user found for this email'}), 404
 
-    if not users or users = []:
+    if not users or users == []:
         return jsonify({'error': 'no user found for this email'}), 404
 
     for user in users:

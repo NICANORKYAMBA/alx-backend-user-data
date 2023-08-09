@@ -6,7 +6,7 @@ Created on Wed Aug  09 16:00:00 2023
 @Author: Nicanor Kyamba
 """
 from os import getenv
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify
 from models.user import User
 from api.v1.views import app_views
 
@@ -41,6 +41,9 @@ def session_login():
 
     user = users[0]
     session_id = auth.create_session(user.id)
+
+    if not session_id:
+        return
 
     SESSION_NAME = getenv('SESSION_NAME')
     user_json = user.to_json()

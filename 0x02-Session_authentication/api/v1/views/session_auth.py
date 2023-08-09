@@ -19,10 +19,10 @@ def session_login():
     email = request.form.get('email')
     password = request.form.get('password')
 
-    if not email:
+    if not email or email == '':
         return jsonify({'error': 'email missing'}), 400
 
-    if not password:
+    if not password or password == '':
         return jsonify({'error': 'password missing'}), 400
 
     try:
@@ -41,9 +41,6 @@ def session_login():
 
     user = users[0]
     session_id = auth.create_session(user.id)
-
-    if not session_id:
-        return
 
     SESSION_NAME = getenv('SESSION_NAME')
     user_json = user.to_json()

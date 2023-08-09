@@ -5,6 +5,7 @@ Created on Mon Aug  07 13:00:00 2023
 
 @Author: Nicanor Kyamba
 """
+from os import getenv
 from flask import request
 from typing import List, TypeVar
 
@@ -88,3 +89,25 @@ class Auth:
             User object
         """
         return None
+
+    def session_cookie(self, request=None) -> str:
+        """
+        Session cookie method
+
+        Parameters
+        ----------
+        request
+            Request object
+
+        Returns
+        -------
+        str
+            Session cookie
+        """
+        if request is None:
+            return None
+
+        SESSION_NAME = getenv('SESSION_NAME')
+
+        if SESSION_NAME == '_my_session_id':
+            return request.cookies.get(SESSION_NAME)

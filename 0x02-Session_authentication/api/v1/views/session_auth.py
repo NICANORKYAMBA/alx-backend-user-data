@@ -19,10 +19,10 @@ def session_login():
     email = request.form.get('email')
     password = request.form.get('password')
 
-    if not email or email == '':
+    if email is None or email == '':
         return jsonify({'error': 'email missing'}), 400
 
-    if not password or password == '':
+    if password is None or password == '':
         return jsonify({'error': 'password missing'}), 400
 
     try:
@@ -30,7 +30,7 @@ def session_login():
     except Exception:
         return jsonify({'error': 'no user found for this email'}), 404
 
-    if not users:
+    if not users or users = []:
         return jsonify({'error': 'no user found for this email'}), 404
 
     for user in users:

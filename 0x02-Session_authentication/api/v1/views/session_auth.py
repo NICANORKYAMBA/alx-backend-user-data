@@ -6,7 +6,7 @@ Created on Wed Aug  09 16:00:00 2023
 @Author: Nicanor Kyamba
 """
 from os import getenv
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from models.user import User
 from api.v1.views import app_views
 
@@ -25,7 +25,10 @@ def session_login():
     if password is None or password == '':
         return jsonify({'error': 'password missing'}), 400
 
-    users = User.search({'email': email})
+    try:
+        users = User.search({'email': email})
+    except Exception:
+        return jsonify({'error': 'no user found for this email'}), 404
 
     if not users or users == []:
         return jsonify({'error': 'no user found for this email'}), 404
@@ -46,3 +49,14 @@ def session_login():
     response.set_cookie(SESSION_NAME, session_id)
 
     return response
+
+
+def session_logout():
+    """
+    Logout endpoint
+    """
+    from api.v1.app import auth
+    if not auth.destroy_session(request):
+        abort(404)
+
+    return jsonify({}), 200

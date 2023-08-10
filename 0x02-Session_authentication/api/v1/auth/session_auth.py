@@ -84,3 +84,32 @@ class SessionAuth(Auth):
         user = User.get(user_id)
 
         return user
+
+    def destroy_session(self, request=None):
+        """
+        Method to destroy a session
+
+        Args:
+            request (flask.Request, optional): request. Defaults to None.
+
+        Returns:
+            str: session id
+        """
+        if request is None:
+            return False
+
+        session_cookie_value = self.session_cookie(request)
+
+        if session_cookie_value is None:
+            return False
+
+        user_id = self.user_id_for_session_id(session_cookie_value)
+
+        if user_id is None:
+            return False
+
+        if user_id in self.user_id_by_session_id:
+            del self.user_id_by_session_id[user_id]
+            return True
+
+        return False

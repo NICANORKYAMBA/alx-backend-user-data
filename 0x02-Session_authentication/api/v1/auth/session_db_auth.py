@@ -23,7 +23,11 @@ class SessionDBAuth(SessionExpAuth):
         if session_id is None:
             return None
 
-        user_session = UserSession(user_id=user_id, session_id=session_id)
+        kwargs = {
+            'user_id': user_id,
+            'session_id': session_id
+        }
+        user_session = UserSession(**kwargs)
         user_session.save()
 
         return session_id

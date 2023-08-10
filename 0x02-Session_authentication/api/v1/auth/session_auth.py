@@ -108,8 +108,5 @@ class SessionAuth(Auth):
         if user_id is None:
             return False
 
-        if user_id in self.user_id_by_session_id:
-            del self.user_id_by_session_id[user_id]
-            return True
-
-        return False
+        del self.user_id_by_session_id[user_id]
+        return True

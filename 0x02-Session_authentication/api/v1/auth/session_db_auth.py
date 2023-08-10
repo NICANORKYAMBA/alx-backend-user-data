@@ -18,9 +18,6 @@ class SessionDBAuth(SessionExpAuth):
         """
         Method that creates a new session for a given user_id
         """
-        if user_id is None:
-            return None
-
         session_id = super().create_session(user_id)
 
         if session_id is None:
@@ -79,6 +76,7 @@ class SessionDBAuth(SessionExpAuth):
 
         try:
             user_session.remove()
-            return True
         except Exception:
             return False
+
+        return True

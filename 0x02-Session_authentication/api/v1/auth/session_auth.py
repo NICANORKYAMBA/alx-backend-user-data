@@ -109,7 +109,7 @@ class SessionAuth(Auth):
             return False
 
         if user_id in self.user_id_by_session_id:
-            del self.user_id_by_session_id[user_id]
+            del self.user_id_by_session_id[session_cookie_value]
             return True
 
         return False

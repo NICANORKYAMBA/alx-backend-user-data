@@ -127,7 +127,7 @@ class Auth:
             user = self._db.find_user_by(email=email)
 
             if not user:
-                raise ValueError("User {} does not exist.".format(email))
+                raise ValueError
             else:
                 new_token = _generate_uuid()
                 user.reset_token = new_token

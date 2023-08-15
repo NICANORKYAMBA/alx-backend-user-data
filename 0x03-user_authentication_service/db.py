@@ -82,6 +82,6 @@ class DB:
             for attr, value in kwargs.items():
                 setattr(user, attr, value)
 
-                self._session.commit()
+            self._session.commit()
         except IntegrityError:
             raise ValueError("Error updating user")

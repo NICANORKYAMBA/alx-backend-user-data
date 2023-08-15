@@ -113,9 +113,9 @@ def get_reset_password_token():
     """
     Route to reset a password
     """
-    try:
-        email = request.form.get('email')
+    email = request.form.get('email')
 
+    try:
         if not email:
             abort(403)
         else:

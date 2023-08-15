@@ -120,9 +120,6 @@ class Auth:
         """
         Generates a reset password token and stores it in the users table
         """
-        if not email:
-            return None
-
         try:
             user = self._db.find_user_by(email=email)
 

@@ -133,4 +133,4 @@ class Auth:
                 user.reset_token = new_token
                 return new_token
         except NoResultFound:
-            return None
+            pass

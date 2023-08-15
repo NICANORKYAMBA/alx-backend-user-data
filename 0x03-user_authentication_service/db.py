@@ -73,11 +73,15 @@ class DB:
         """
         Update a user in the User table in the database
         """
-        if not kwargs:
-            raise ValueError
+        if user_id is None or kwargs is None:
+            return None
 
         user = self.find_user_by(id=user_id)
 
-        if not user:
-            raise ValueError
-        return user
+        for attr, value in kwargs.items():
+            if not hasattr(user, attr):
+                raise ValueError("Invalid attribute")
+            setattr(user, attr, value)
+
+        self._session.commit()
+        return None

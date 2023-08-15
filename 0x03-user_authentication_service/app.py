@@ -7,7 +7,7 @@ Created on Tue Aug  15 09:00:00 2023
 """
 from auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 
 
 app = Flask(__name__)
@@ -39,6 +39,34 @@ def users():
                         "message": "user created"}), 200
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
+
+
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
+def login():
+    """
+    Route to login a user
+    """
+    try:
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        validate_login = AUTH.valid_login(email, password)
+
+        if validate_login:
+            session_id = AUTH.create_session(email)
+            response_data = {
+                    "email": email,
+                    "message": "logged in"
+                    }
+            response = jsonify(response_data)
+
+            response.set_cookie('session_id', value=session_id)
+
+            return response, 200
+        else:
+            abort(401)
+    except NoResultFound:
+        abort(401)
 
 
 if __name__ == '__main__':

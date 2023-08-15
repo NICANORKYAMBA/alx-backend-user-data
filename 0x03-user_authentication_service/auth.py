@@ -93,7 +93,7 @@ class Auth:
             user.session_id = session_id
             return session_id
 
-    def get_user_by_session_id(self, session_id: str) -> User:
+    def get_user_from_session_id(self, session_id: str) -> User:
         """
         Gets a user by their session id
         """

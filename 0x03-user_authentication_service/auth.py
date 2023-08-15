@@ -6,6 +6,7 @@ Created on Mon Aug  14 16:00:00 2023
 @Author: Nicanor Kyamba
 """
 import bcrypt
+from uuid import uuid4
 from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
@@ -68,3 +69,9 @@ class Auth:
             if hashed_password:
                 return True
             return False
+
+    def _generate_uuid(self):
+        """
+        Generates uuids
+        """
+        return str(uuid4())

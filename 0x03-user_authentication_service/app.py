@@ -127,9 +127,15 @@ def get_reset_password_token():
 
 @app.route('/reset_password', methods=['PUT'], strict_slashes=False)
 def update_password():
+    """
+    Route to update a password
+    """
     email = request.form.get('email')
     reset_token = request.form.get('reset_token')
     new_password = request.form.get('new_password')
+
+    if not reset_token:
+        abort(403)
 
     try:
         reset_password = AUTH.update_password(reset_token, new_password)

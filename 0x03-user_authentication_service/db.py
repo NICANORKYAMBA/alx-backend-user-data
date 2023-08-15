@@ -73,15 +73,11 @@ class DB:
         """
         Update a user in the User table in the database
         """
-        if user_id is None or kwargs is None:
-            return None
+        if not kwargs:
+            raise ValueError
 
         user = self.find_user_by(id=user_id)
 
-        try:
-            for attr, value in kwargs.items():
-                setattr(user, attr, value)
-
-            self._session.commit()
-        except IntegrityError:
-            raise ValueError("Error updating user")
+        if not user:
+            raise ValueError
+        return user

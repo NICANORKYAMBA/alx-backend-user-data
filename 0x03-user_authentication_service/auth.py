@@ -76,3 +76,19 @@ class Auth:
             if hashed_password:
                 return True
             return False
+
+    def create_session(self, email: str) -> str:
+        """
+        Creates a session id for a user and stores it in the users table
+        """
+        if not email:
+            return None
+
+        try:
+            user = self._db.find_user_by(email=email)
+        except NoResultFound:
+            return None
+        else:
+            session_id = _generate_uuid()
+            user.session_id = session_id
+            return session_id
